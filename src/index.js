@@ -124,6 +124,15 @@ class Service {
         });
       }
 
+      if(query && query.$index){
+          if(!query.$index.IndexName) reject(new errors.GeneralError('Internal error, lose IndexName'))
+          if(!query.$index.KeyConditionExpression) reject(new errors.GeneralError('Internal error, lose KeyConditionExpression '))
+          if(!query.$index.ExpressionAttributeValues) reject(new errors.GeneralError('Internal error, lose ExpressionAttributeValues'))
+          if(!query.$index.ExpressionAttributeNames) reject(new errors.GeneralError('Internal error, lose ExpressionAttributeNames'))
+          options.index = query.$index
+      }
+
+
       this.db.createReadStream(options)
         .on('data', obj => {
           if (!matchesSpecialFilters(obj.value, query)) {
